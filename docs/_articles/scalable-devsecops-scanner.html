@@ -1,3 +1,8 @@
+---
+layout: post
+title: "scalable devsecops scanner"
+---
+
 # Designing a Scalable Vulnerability Scanning Pipeline: An Asynchronous Architecture Case Study
 
 We needed to scan thousands of repositories — Python and Node.js — for known vulnerabilities, run the scans in isolated environments, and deliver PDF and Excel reports to security teams. The naive approach of performing the scan inside the request-response cycle collapsed the moment we hit a 10‑minute scan time on a mid‑size monorepo. What follows is a dissection of the architecture we settled on, the trade‑offs we made, and the scars we earned along the way.

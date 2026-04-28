@@ -1,14 +1,11 @@
 baseurl: "/engineering-articles"
 title: "Otávio Tavares | Engineering Articles"
 description: "DevSecOps, Security Engineering, and Scalable Systems"
-theme: minima
-
+theme: jekyll-theme-minimal
 markdown: kramdown
-
 collections:
   articles:
     output: true
-
 defaults:
   - scope:
       path: ""
