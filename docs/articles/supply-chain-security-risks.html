@@ -1,0 +1,71 @@
+<article class="prose prose-invert max-w-none">
+  <header class="mb-8">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="px-3 py-1 text-xs font-medium bg-blue-900/60 text-blue-300 rounded-full">Supply Chain</span>
+      <span class="px-3 py-1 text-xs font-medium bg-red-900/60 text-red-300 rounded-full">High Risk</span>
+    </div>
+    <h1 class="text-4xl font-bold mb-3 bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">The Hidden Risks in Software Supply Chains</h1>
+    <p class="text-gray-400">How dependency confusion, typosquatting, and compromised registries threaten modern applications — and what to do about it.</p>
+    <div class="flex items-center gap-4 mt-4 text-sm text-gray-500">
+      <span><i class="far fa-calendar mr-1"></i> April 28, 2026</span>
+      <span><i class="far fa-clock mr-1"></i> 12 min read</span>
+    </div>
+  </header>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">The Attack Surface We Ignore</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Modern applications are built on mountains of open-source dependencies. A typical Node.js project pulls in over 1,200 transitive packages; a Python project easily reaches 300. Each of those packages is a potential entry point — not through a vulnerability in the code itself, but through the supply chain that delivers it.
+    </p>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      The <strong>dependency confusion</strong> attack, disclosed by Alex Birsan in 2021, remains one of the most effective vectors. By uploading a malicious package with the same name as a company's internal private package to a public registry, an attacker can trick build systems into pulling the malicious version instead of the legitimate one. Despite widespread awareness, a 2025 study found that 37% of organizations are still vulnerable to this exact attack.
+    </p>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Typosquatting Still Works</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Typosquatting — registering packages with names similar to popular ones (<code class="bg-gray-800 px-1 rounded">requets</code> instead of <code class="bg-gray-800 px-1 rounded">requests</code>) — continues to claim victims. In March 2026 alone, over 200 malicious packages were removed from PyPI, many using this technique. These packages often include subtle backdoors that activate only in specific environments, making them extremely hard to detect with static analysis alone.
+    </p>
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 mb-4">
+      <h4 class="text-sm font-semibold text-red-400 mb-2">🔴 Real World Example</h4>
+      <p class="text-gray-400 text-sm">In 2023, a typosquatted <code class="bg-gray-900 px-1 rounded">colorama</code> package stole environment variables from thousands of developer machines before being detected — two months after it was uploaded.</p>
+    </div>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Compromised Maintainer Accounts</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Even legitimate packages can become malicious if a maintainer's account is compromised. In 2025, the <strong>xz-utils</strong> incident demonstrated how a multi-year social engineering campaign could insert a backdoor into a widely-used compression library. The attack was discovered only by sheer luck — a developer noticed SSH login slowdowns by 0.5 seconds.
+    </p>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      The xz-utils case underscores a critical truth: <strong>trust is not static</strong>. A package that was safe yesterday may not be safe today. Continuous verification is essential.
+    </p>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Mitigation Strategies That Actually Work</h2>
+    <ul class="space-y-3 text-gray-300">
+      <li class="flex items-start gap-2">
+        <span class="text-green-400 mt-1"><i class="fas fa-shield-alt"></i></span>
+        <span><strong>Lockfile integrity checking:</strong> Use lockfiles with checksums and verify them in CI. Tools like <code class="bg-gray-800 px-1 rounded">npm audit signatures</code> and <code class="bg-gray-800 px-1 rounded">pip-audit</code> are baseline.</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="text-green-400 mt-1"><i class="fas fa-shield-alt"></i></span>
+        <span><strong>Private registry mirroring:</strong> Mirror packages internally after scanning. This prevents both dependency confusion and availability issues from upstream outages.</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="text-green-400 mt-1"><i class="fas fa-shield-alt"></i></span>
+        <span><strong>Automated package scrutiny:</strong> Implement a policy that flags packages with low download counts, recent publish dates, or unusual maintainer activity — the "smell tests" that often precede malicious uploads.</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <span class="text-green-400 mt-1"><i class="fas fa-shield-alt"></i></span>
+        <span><strong>SBOM and provenance:</strong> Generate a Software Bill of Materials for every release and validate it against known vulnerability databases. Tools like Syft, Grype, and Cosign are mature enough for production use.</span>
+      </li>
+    </ul>
+  </section>
+
+  <footer class="mt-12 pt-6 border-t border-gray-700 text-sm text-gray-500">
+    <p>Tags: <span class="text-blue-400">Supply Chain</span>, <span class="text-blue-400">Dependency Security</span>, <span class="text-blue-400">DevSecOps</span></p>
+  </footer>
+</article>
