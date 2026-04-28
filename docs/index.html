@@ -1,18 +1,97 @@
----
-layout: default
-title: "Otávio Tavares | Engineering Articles"
----
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering Articles | Otávio Tavares</title>
+  <meta name="description" content="DevSecOps, Security Engineering, and Scalable Systems">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #f5f5f5; }
+    .card { background: #171717; border-radius: 24px; border: 1px solid #262626; transition: all 0.2s; }
+    .card:hover { transform: translateY(-4px); border-color: #404040; box-shadow: 0 20px 35px -8px rgba(0,0,0,0.7); }
+  </style>
+</head>
+<body class="antialiased">
+  <header class="fixed top-0 left-0 right-0 z-50 py-4 px-6 flex justify-between items-center" style="background: rgba(10,10,10,0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05);">
+    <span class="text-xl font-bold bg-gradient-to-r from-blue-500 to-indigo-400 bg-clip-text text-transparent">Engineering Articles</span>
+    <a href="https://otaviotavaresdev.github.io/OtavioTavaresDev/" class="text-sm text-gray-400 hover:text-blue-400 transition">← Portfolio</a>
+  </header>
 
-<h1>{{ site.title }}</h1>
-<h2>{{ site.description }}</h2>
+  <main class="pt-28 pb-16 px-6 max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold mb-2">Articles</h1>
+    <p class="text-gray-400 mb-12">DevSecOps, Security Engineering, and Scalable Systems</p>
+    <div id="articles-container" class="grid grid-cols-1 gap-6">
+      <!-- preenchido via JS -->
+    </div>
+    <div id="article-content" class="mt-12 hidden">
+      <!-- conteúdo do artigo carregado aqui -->
+    </div>
+  </main>
 
-<h2>Articles</h2>
-{% for article in site.articles %}
-  <article style="margin-bottom: 2rem;">
-    <h3><a href="{{ article.url | relative_url }}">{{ article.title }}</a></h3>
-    {% if article.description %}
-      <p>{{ article.description }}</p>
-    {% endif %}
-    <small>{{ article.date | date: "%B %d, %Y" }}</small>
-  </article>
-{% endfor %}
+  <footer class="border-t border-gray-800 py-8 text-center text-sm text-gray-500">
+    © 2026 Otávio Tavares — Built with care.
+  </footer>
+
+  <script>
+    // Lista de artigos (pode ser substituída por fetch de JSON)
+    const articles = [
+      {
+        title: "CICD Security Failures",
+        description: "Common CI/CD pipeline vulnerabilities and how to fix them.",
+        url: "articles/CICD-security-failures.html"
+      },
+      {
+        title: "Scalable DevSecOps Scanner",
+        description: "Building a scalable vulnerability scanning pipeline with asynchronous architecture.",
+        url: "articles/scalable-devsecops-scanner.html"
+      }
+    ];
+
+    const container = document.getElementById('articles-container');
+    const contentDiv = document.getElementById('article-content');
+
+    function renderArticles() {
+      container.innerHTML = '';
+      articles.forEach(article => {
+        const card = document.createElement('div');
+        card.className = 'card p-6 cursor-pointer';
+        card.innerHTML = `
+          <h3 class="text-xl font-bold mb-2">${article.title}</h3>
+          <p class="text-gray-400 text-sm">${article.description}</p>
+        `;
+        card.addEventListener('click', () => loadArticle(article));
+        container.appendChild(card);
+      });
+    }
+
+    async function loadArticle(article) {
+      try {
+        const response = await fetch(article.url);
+        if (!response.ok) throw new Error('Article not found');
+        const html = await response.text();
+        contentDiv.innerHTML = `
+          <div class="mb-6">
+            <button onclick="showArticles()" class="text-blue-400 hover:underline text-sm"><i class="fas fa-arrow-left mr-1"></i> Back to articles</button>
+          </div>
+          <div class="card p-8">${html}</div>
+        `;
+        container.classList.add('hidden');
+        contentDiv.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (e) {
+        contentDiv.innerHTML = `<p class="text-red-400">Failed to load article.</p>`;
+        contentDiv.classList.remove('hidden');
+      }
+    }
+
+    function showArticles() {
+      container.classList.remove('hidden');
+      contentDiv.classList.add('hidden');
+    }
+
+    renderArticles();
+  </script>
+</body>
+</html>
