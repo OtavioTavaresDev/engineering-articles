@@ -3,25 +3,16 @@ layout: default
 title: "Otávio Tavares | Engineering Articles"
 ---
 
-{{ content }}
+<h1>{{ site.title }}</h1>
+<h2>{{ site.description }}</h2>
 
 <h2>Articles</h2>
-
-{% if site.articles.size > 0 %}
-  <ul>
-  {% for article in site.articles %}
-    <li>
-      <a href="{{ article.url | relative_url }}">{{ article.title }}</a>
-      {% if article.description %}
-        – {{ article.description }}
-      {% endif %}
-    </li>
-  {% endfor %}
-  </ul>
-{% else %}
-  <p>No articles published yet. Check back soon.</p>
-{% endif %}
-
-<footer>
-  © {{ site.time | date: '%Y' }} {{ site.title }} — Built with care.
-</footer>
+{% for article in site.articles %}
+  <article style="margin-bottom: 2rem;">
+    <h3><a href="{{ article.url | relative_url }}">{{ article.title }}</a></h3>
+    {% if article.description %}
+      <p>{{ article.description }}</p>
+    {% endif %}
+    <small>{{ article.date | date: "%B %d, %Y" }}</small>
+  </article>
+{% endfor %}
