@@ -36,26 +36,15 @@
 
   <script>
     const articles = [
-      {
-        title: "CI/CD Security Failures",
-        description: "Common CI/CD pipeline vulnerabilities and how to fix them.",
-        url: "articles/CICD-security-failures.html"
-      },
-      {
-        title: "Scalable DevSecOps Scanner",
-        description: "Building a scalable vulnerability scanning pipeline with asynchronous architecture.",
-        url: "articles/scalable-devsecops-scanner.html"
-      },
-      {
-        title: "The Hidden Risks in Software Supply Chains",
-        description: "Dependency confusion, typosquatting, and compromised registries threaten modern apps.",
-        url: "articles/supply-chain-security-risks.html"
-      },
-      {
-        title: "AI-Powered Threat Detection: Beyond Signatures",
-        description: "How LLMs and behavioral analytics are reshaping threat detection and response.",
-        url: "articles/ai-threat-detection.html"
-      }
+      { title: "Securing AI-Assisted Development Pipelines", description: "The hidden risks of integrating LLMs into modern software engineering workflows.", url: "articles/securing-ai-pipelines.html" },
+      { title: "Kubernetes Hardening Beyond Defaults", description: "Why default Kubernetes deployments expose far more attack surface than most teams realize.", url: "articles/kubernetes-hardening.html" },
+      { title: "Why Most SOC Alerts Are Noise", description: "Detection engineering, signal quality, and the challenge of reducing alert fatigue in modern SOC environments.", url: "articles/why-soc-alerts-are-noise.html" },
+      { title: "Building Lightweight Security Automation with Python", description: "Practical approaches for automating repetitive security operations without overengineering.", url: "articles/lightweight-security-automation.html" },
+      { title: "Modern Phishing Attacks and Identity Abuse", description: "Session hijacking, MFA bypass techniques, and the evolution of identity-focused attacks.", url: "articles/modern-phishing-identity-abuse.html" },
+      { title: "CI/CD Security Failures", description: "Common CI/CD pipeline vulnerabilities and how to fix them.", url: "articles/CICD-security-failures.html" },
+      { title: "Scalable DevSecOps Scanner", description: "Building a scalable vulnerability scanning pipeline with asynchronous architecture.", url: "articles/scalable-devsecops-scanner.html" },
+      { title: "The Hidden Risks in Software Supply Chains", description: "Dependency confusion, typosquatting, and compromised registries threaten modern apps.", url: "articles/supply-chain-security-risks.html" },
+      { title: "AI-Powered Threat Detection: Beyond Signatures", description: "How LLMs and behavioral analytics are reshaping threat detection and response.", url: "articles/ai-threat-detection.html" }
     ];
 
     const container = document.getElementById('articles-container');

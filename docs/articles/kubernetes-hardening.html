@@ -1,0 +1,90 @@
+<article class="prose prose-invert max-w-none">
+  <header class="mb-8">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="px-3 py-1 text-xs font-medium bg-blue-900/60 text-blue-300 rounded-full">Kubernetes</span>
+      <span class="px-3 py-1 text-xs font-medium bg-red-900/60 text-red-300 rounded-full">Hardening</span>
+    </div>
+    <h1 class="text-4xl font-bold mb-3 bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Kubernetes Hardening Beyond Defaults</h1>
+    <p class="text-gray-400">Why default Kubernetes deployments expose far more attack surface than most teams realize.</p>
+    <div class="flex items-center gap-4 mt-4 text-sm text-gray-500">
+      <span><i class="far fa-calendar mr-1"></i> May 3, 2026</span>
+      <span><i class="far fa-clock mr-1"></i> 15 min read</span>
+    </div>
+  </header>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">The Default Insecurity of "Vanilla" K8s</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Kubernetes ships with security features — but almost all of them are disabled by default. A default cluster allows any authenticated user to read most secrets, run privileged containers, and potentially escape to the host. The 2026 K8s Security Report found that 84% of clusters in production had at least one critical misconfiguration.
+    </p>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      This isn't FUD. Attackers are actively scanning for exposed kubelets, anonymous binds, and default service account tokens. Let's walk through the real hardening steps that move beyond the "CIS benchmark checklist."
+    </p>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">RBAC: The First and Most Broken Layer</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Most teams grant <code class="bg-gray-800 px-1 rounded">cluster-admin</code> to a handful of users and call it done. But RBAC is granular — you can restrict by namespace, resource type, and verb. Start with:
+    </p>
+    <ul class="space-y-2 text-gray-300 mb-4">
+      <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span> Denying <code class="bg-gray-800 px-1 rounded">get secrets</code> to all but a specific CI service account.</li>
+      <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span> Using <code class="bg-gray-800 px-1 rounded">ResourceQuotas</code> to limit pod creation in namespaces.</li>
+      <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span> Rotating service account tokens and disabling automount for pods that don't need API access.</li>
+    </ul>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Privileged Containers Are a P1 Finding</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Running containers as root with <code class="bg-gray-800 px-1 rounded">privileged: true</code> gives the container almost all host capabilities. A single RCE in that pod equals full host compromise. Use <code class="bg-gray-800 px-1 rounded">securityContext</code> to drop all capabilities and add only the needed ones:
+    </p>
+    <pre class="bg-gray-800 p-4 rounded-lg overflow-x-auto text-sm text-gray-300"><code>securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  capabilities:
+    drop: ["ALL"]
+    add: ["NET_ADMIN"]  # only if required</code></pre>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Network Policies: The Most Ignored Control</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      By default, all pods can talk to all other pods. A compromised workload can scan internal services, probe metadata endpoints, and pivot laterally. Implement default-deny network policies and explicitly allow only necessary traffic.
+    </p>
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 mb-4">
+      <pre class="text-sm text-gray-300"><code>kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-deny
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress</code></pre>
+    </div>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Admission Controllers for Enforcement</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Admission controllers (like OPA Gatekeeper or Kyverno) let you enforce policies before a pod is created. Examples:
+    </p>
+    <ul class="space-y-2 text-gray-300 mb-4">
+      <li class="flex items-start gap-2"><span class="text-green-400 mt-1">✓</span> Reject any pod that requests <code class="bg-gray-800 px-1 rounded">privileged: true</code></li>
+      <li class="flex items-start gap-2"><span class="text-green-400 mt-1">✓</span> Require image digest (not just tag) to prevent tag hijacking</li>
+      <li class="flex items-start gap-2"><span class="text-green-400 mt-1">✓</span> Force <code class="bg-gray-800 px-1 rounded">runAsNonRoot</code> on all workloads</li>
+    </ul>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Runtime Security: Falco and Beyond</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Hardening configuration isn't enough — you need runtime detection. Falco monitors syscalls and container behavior, alerting on suspicious actions like <code class="bg-gray-800 px-1 rounded">unshadow</code> execution or reverse shells. Pair it with a SIEM to investigate.
+    </p>
+  </section>
+
+  <footer class="mt-12 pt-6 border-t border-gray-700 text-sm text-gray-500">
+    <p>Tags: <span class="text-blue-400">Kubernetes</span>, <span class="text-blue-400">Container Security</span>, <span class="text-blue-400">Cloud Native</span>, <span class="text-blue-400">RBAC</span></p>
+  </footer>
+</article>
