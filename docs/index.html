@@ -27,27 +27,19 @@
     <h1 class="text-4xl font-bold mb-2">Articles</h1>
     <p class="text-gray-400 mb-6">DevSecOps, Security Engineering, and Scalable Systems</p>
 
-    <!-- Search and Filter Section -->
     <div class="mb-8 space-y-4">
       <div class="relative">
         <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
         <input type="text" id="search-input" placeholder="Search by title or description..." class="w-full bg-gray-800 border border-gray-700 rounded-lg py-2 pl-10 pr-4 text-gray-200 focus:border-blue-500 transition">
       </div>
-      
       <div>
         <h3 class="text-sm font-semibold text-gray-400 mb-2">Filter by tag</h3>
-        <div id="tag-filters" class="flex flex-wrap gap-2">
-          <!-- Tags will be populated dynamically -->
-        </div>
+        <div id="tag-filters" class="flex flex-wrap gap-2"></div>
       </div>
     </div>
 
-    <div id="articles-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- preenchido via JS -->
-    </div>
-    <div id="article-content" class="mt-12 hidden">
-      <!-- conteúdo do artigo carregado aqui -->
-    </div>
+    <div id="articles-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+    <div id="article-content" class="mt-12 hidden"></div>
   </main>
 
   <footer class="border-t border-gray-800 py-8 text-center text-sm text-gray-500">
@@ -56,20 +48,33 @@
 
   <script>
     const articles = [
+      { title: "MDR vs Traditional SOC: Why Managed Detection Is Growing", description: "The shift from in-house alert triage to outcome-driven detection services.", url: "articles/mdr-vs-traditional-soc.html", tags: ["MDR", "SOC", "Detection Engineering"] },
+      { title: "Why OWASP Still Matters in 2026", description: "How the Top 10, API Security, and SAMM remain relevant in modern software development.", url: "articles/owasp-still-matters-2026.html", tags: ["OWASP", "AppSec", "API Security"] },
+      { title: "AI Security Is Becoming a New Engineering Discipline", description: "LLM security, prompt injection, supply chain, and the future of AI governance.", url: "articles/ai-security-new-discipline.html", tags: ["AI Security", "LLM", "Emerging Tech"] },
+      { title: "Why SIEM Alone Is No Longer Enough", description: "The shift toward XDR, EDR, and detection engineering over log aggregation.", url: "articles/siem-alone-not-enough.html", tags: ["SIEM", "XDR", "EDR"] },
+      { title: "Threat Hunting vs Detection Engineering", description: "Two complementary disciplines, often confused.", url: "articles/threat-hunting-vs-detection-engineering.html", tags: ["Threat Hunting", "Detection Engineering"] },
+      { title: "Building Practical Cybersecurity Skills Without Certifications", description: "Labs, projects, detection rules, GitHub, and real infrastructure.", url: "articles/build-skills-without-certs.html", tags: ["Career", "Learning"] },
+      { title: "Why Modern Security Teams Need Python Automation", description: "From log parsing to API orchestration, Python is the lingua franca of security automation.", url: "articles/python-automation-security-teams.html", tags: ["Python", "Automation", "Security Engineering"] },
+      { title: "The Future of AI-Assisted SOC Operations", description: "LLMs, summarization, investigation, and the role of human analysts.", url: "articles/future-ai-assisted-soc.html", tags: ["AI", "SOC", "LLM"] },
       { title: "Securing AI-Assisted Development Pipelines", description: "The hidden risks of integrating LLMs into modern software engineering workflows.", url: "articles/securing-ai-pipelines.html", tags: ["AI Security", "DevSecOps", "LLM"] },
       { title: "Kubernetes Hardening Beyond Defaults", description: "Why default Kubernetes deployments expose far more attack surface than most teams realize.", url: "articles/kubernetes-hardening.html", tags: ["Kubernetes", "Container Security", "Cloud Native"] },
-      { title: "Why Most SOC Alerts Are Noise", description: "Detection engineering, signal quality, and the challenge of reducing alert fatigue in modern SOC environments.", url: "articles/why-soc-alerts-are-noise.html", tags: ["Detection Engineering", "SOC", "SIEM"] },
-      { title: "Building Lightweight Security Automation with Python", description: "Practical approaches for automating repetitive security operations without overengineering.", url: "articles/lightweight-security-automation.html", tags: ["Automation", "Python", "SOC"] },
-      { title: "Modern Phishing Attacks and Identity Abuse", description: "Session hijacking, MFA bypass techniques, and the evolution of identity-focused attacks.", url: "articles/modern-phishing-identity-abuse.html", tags: ["Identity Security", "Phishing", "MFA"] },
+      { title: "Why Most SOC Alerts Are Noise", description: "Detection engineering, signal quality, and the challenge of reducing alert fatigue.", url: "articles/why-soc-alerts-are-noise.html", tags: ["Detection Engineering", "SOC", "SIEM"] },
+      { title: "Building Lightweight Security Automation with Python", description: "Practical approaches for automating repetitive security operations.", url: "articles/lightweight-security-automation.html", tags: ["Automation", "Python", "SOC"] },
+      { title: "Modern Phishing Attacks and Identity Abuse", description: "Session hijacking, MFA bypass techniques, and identity-focused attacks.", url: "articles/modern-phishing-identity-abuse.html", tags: ["Identity Security", "Phishing", "MFA"] },
       { title: "CI/CD Security Failures", description: "Common CI/CD pipeline vulnerabilities and how to fix them.", url: "articles/CICD-security-failures.html", tags: ["CI/CD", "DevSecOps", "Pipeline Security"] },
       { title: "Scalable DevSecOps Scanner", description: "Building a scalable vulnerability scanning pipeline with asynchronous architecture.", url: "articles/scalable-devsecops-scanner.html", tags: ["Architecture", "Scalability", "DevSecOps"] },
-      { title: "The Hidden Risks in Software Supply Chains", description: "Dependency confusion, typosquatting, and compromised registries threaten modern apps.", url: "articles/supply-chain-security-risks.html", tags: ["Supply Chain", "Dependency Security"] },
-      { title: "AI-Powered Threat Detection: Beyond Signatures", description: "How LLMs and behavioral analytics are reshaping threat detection and response.", url: "articles/ai-threat-detection.html", tags: ["AI Security", "Threat Detection", "Machine Learning"] },
-      { title: "Secrets Management Failures in Modern Infrastructure", description: "API keys, CI/CD leaks, and why secrets remain one of the easiest attack vectors.", url: "articles/secrets-management-failures.html", tags: ["Secrets Management", "DevSecOps", "Cloud Security"] },
+      { title: "The Hidden Risks in Software Supply Chains", description: "Dependency confusion, typosquatting, and compromised registries.", url: "articles/supply-chain-security-risks.html", tags: ["Supply Chain", "Dependency Security"] },
+      { title: "AI-Powered Threat Detection: Beyond Signatures", description: "How LLMs and behavioral analytics are reshaping threat detection.", url: "articles/ai-threat-detection.html", tags: ["AI Security", "Threat Detection", "Machine Learning"] },
+      { title: "Secrets Management Failures in Modern Infrastructure", description: "API keys, CI/CD leaks, and why secrets remain an easy attack vector.", url: "articles/secrets-management-failures.html", tags: ["Secrets Management", "DevSecOps", "Cloud Security"] },
       { title: "The Operational Risks of AI-Generated Code", description: "Productivity gains, hidden vulnerabilities, and the future of secure software engineering.", url: "articles/risks-of-ai-generated-code.html", tags: ["AI Security", "DevSecOps", "SAST"] },
       { title: "Building Effective Detection Rules with Sigma and KQL", description: "Detection engineering strategies for reducing noise and improving signal quality.", url: "articles/detection-rules-sigma-kql.html", tags: ["Detection Engineering", "Sigma", "KQL", "SIEM"] },
       { title: "Runtime Security in Containerized Environments", description: "Why image scanning alone is insufficient for modern container security.", url: "articles/runtime-security-containerized.html", tags: ["Container Security", "Runtime Security", "Falco"] },
-      { title: "The Rise of Infostealers and Session Hijacking", description: "Why modern attackers no longer need passwords to compromise accounts.", url: "articles/infostealers-session-hijacking.html", tags: ["Infostealers", "Session Hijacking", "Identity Security", "MFA"] }
+      { title: "The Rise of Infostealers and Session Hijacking", description: "Why modern attackers no longer need passwords to compromise accounts.", url: "articles/infostealers-session-hijacking.html", tags: ["Infostealers", "Session Hijacking", "Identity Security", "MFA"] },
+      { title: "What Security Engineers Actually Do in Modern Companies", description: "Beyond stereotypes: the real operational responsibilities.", url: "articles/what-security-engineers-do.html", tags: ["Career", "Security Engineering"] },
+      { title: "Blue Team vs Red Team: Different Goals, Same Battlefield", description: "Understanding how offensive and defensive security teams operate.", url: "articles/blue-team-vs-red-team.html", tags: ["Red Team", "Blue Team", "Purple Team"] },
+      { title: "Detection Engineering Is Becoming One of the Most Valuable Security Skills", description: "Why modern security teams prioritize signal quality over alert volume.", url: "articles/detection-engineering-valuable-skill.html", tags: ["Detection Engineering", "Career"] },
+      { title: "Building Vorynex: Designing Security Tooling for Modern Infrastructure", description: "Architectural decisions, automation challenges, and security philosophy.", url: "articles/building-vorynex-platform.html", tags: ["Vorynex", "Platform Security", "Tooling"] },
+      { title: "Why Most People Misunderstand Cybersecurity Careers", description: "Security is far more about systems, processes, and communication than hacking.", url: "articles/misunderstood-cybersecurity-careers.html", tags: ["Career", "Cybersecurity"] }
     ];
 
     const container = document.getElementById('articles-container');
@@ -78,7 +83,6 @@
     const tagFiltersDiv = document.getElementById('tag-filters');
 
     let activeTag = null;
-
     const allTags = [...new Set(articles.flatMap(a => a.tags))].sort();
 
     function renderTagFilters() {
@@ -92,7 +96,6 @@
         renderArticles();
       });
       tagFiltersDiv.appendChild(allBtn);
-
       allTags.forEach(tag => {
         const btn = document.createElement('button');
         btn.textContent = tag;
@@ -113,12 +116,10 @@
         const matchesTag = activeTag ? article.tags.includes(activeTag) : true;
         return matchesSearch && matchesTag;
       });
-
       if (filtered.length === 0) {
         container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">No articles match your filters.</div>';
         return;
       }
-
       container.innerHTML = '';
       filtered.forEach(article => {
         const card = document.createElement('div');
