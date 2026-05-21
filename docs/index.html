@@ -11,6 +11,10 @@
     body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #f5f5f5; }
     .card { background: #171717; border-radius: 24px; border: 1px solid #262626; transition: all 0.2s; }
     .card:hover { transform: translateY(-4px); border-color: #404040; box-shadow: 0 20px 35px -8px rgba(0,0,0,0.7); }
+    .tag { background: #262626; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; color: #a3a3a3; }
+    .tag:hover { background: #3f3f46; }
+    .active-tag { background: #3b82f6; color: white; }
+    #search-input:focus { outline: none; border-color: #3b82f6; }
   </style>
 </head>
 <body class="antialiased">
@@ -19,10 +23,26 @@
     <a href="https://otaviotavaresdev.github.io/OtavioTavaresDev/" class="text-sm text-gray-400 hover:text-blue-400 transition">← Portfolio</a>
   </header>
 
-  <main class="pt-28 pb-16 px-6 max-w-4xl mx-auto">
+  <main class="pt-28 pb-16 px-6 max-w-6xl mx-auto">
     <h1 class="text-4xl font-bold mb-2">Articles</h1>
-    <p class="text-gray-400 mb-12">DevSecOps, Security Engineering, and Scalable Systems</p>
-    <div id="articles-container" class="grid grid-cols-1 gap-6">
+    <p class="text-gray-400 mb-6">DevSecOps, Security Engineering, and Scalable Systems</p>
+
+    <!-- Search and Filter Section -->
+    <div class="mb-8 space-y-4">
+      <div class="relative">
+        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+        <input type="text" id="search-input" placeholder="Search by title or description..." class="w-full bg-gray-800 border border-gray-700 rounded-lg py-2 pl-10 pr-4 text-gray-200 focus:border-blue-500 transition">
+      </div>
+      
+      <div>
+        <h3 class="text-sm font-semibold text-gray-400 mb-2">Filter by tag</h3>
+        <div id="tag-filters" class="flex flex-wrap gap-2">
+          <!-- Tags will be populated dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <div id="articles-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- preenchido via JS -->
     </div>
     <div id="article-content" class="mt-12 hidden">
@@ -36,28 +56,78 @@
 
   <script>
     const articles = [
-      { title: "Securing AI-Assisted Development Pipelines", description: "The hidden risks of integrating LLMs into modern software engineering workflows.", url: "articles/securing-ai-pipelines.html" },
-      { title: "Kubernetes Hardening Beyond Defaults", description: "Why default Kubernetes deployments expose far more attack surface than most teams realize.", url: "articles/kubernetes-hardening.html" },
-      { title: "Why Most SOC Alerts Are Noise", description: "Detection engineering, signal quality, and the challenge of reducing alert fatigue in modern SOC environments.", url: "articles/why-soc-alerts-are-noise.html" },
-      { title: "Building Lightweight Security Automation with Python", description: "Practical approaches for automating repetitive security operations without overengineering.", url: "articles/lightweight-security-automation.html" },
-      { title: "Modern Phishing Attacks and Identity Abuse", description: "Session hijacking, MFA bypass techniques, and the evolution of identity-focused attacks.", url: "articles/modern-phishing-identity-abuse.html" },
-      { title: "CI/CD Security Failures", description: "Common CI/CD pipeline vulnerabilities and how to fix them.", url: "articles/CICD-security-failures.html" },
-      { title: "Scalable DevSecOps Scanner", description: "Building a scalable vulnerability scanning pipeline with asynchronous architecture.", url: "articles/scalable-devsecops-scanner.html" },
-      { title: "The Hidden Risks in Software Supply Chains", description: "Dependency confusion, typosquatting, and compromised registries threaten modern apps.", url: "articles/supply-chain-security-risks.html" },
-      { title: "AI-Powered Threat Detection: Beyond Signatures", description: "How LLMs and behavioral analytics are reshaping threat detection and response.", url: "articles/ai-threat-detection.html" }
+      { title: "Securing AI-Assisted Development Pipelines", description: "The hidden risks of integrating LLMs into modern software engineering workflows.", url: "articles/securing-ai-pipelines.html", tags: ["AI Security", "DevSecOps", "LLM"] },
+      { title: "Kubernetes Hardening Beyond Defaults", description: "Why default Kubernetes deployments expose far more attack surface than most teams realize.", url: "articles/kubernetes-hardening.html", tags: ["Kubernetes", "Container Security", "Cloud Native"] },
+      { title: "Why Most SOC Alerts Are Noise", description: "Detection engineering, signal quality, and the challenge of reducing alert fatigue in modern SOC environments.", url: "articles/why-soc-alerts-are-noise.html", tags: ["Detection Engineering", "SOC", "SIEM"] },
+      { title: "Building Lightweight Security Automation with Python", description: "Practical approaches for automating repetitive security operations without overengineering.", url: "articles/lightweight-security-automation.html", tags: ["Automation", "Python", "SOC"] },
+      { title: "Modern Phishing Attacks and Identity Abuse", description: "Session hijacking, MFA bypass techniques, and the evolution of identity-focused attacks.", url: "articles/modern-phishing-identity-abuse.html", tags: ["Identity Security", "Phishing", "MFA"] },
+      { title: "CI/CD Security Failures", description: "Common CI/CD pipeline vulnerabilities and how to fix them.", url: "articles/CICD-security-failures.html", tags: ["CI/CD", "DevSecOps", "Pipeline Security"] },
+      { title: "Scalable DevSecOps Scanner", description: "Building a scalable vulnerability scanning pipeline with asynchronous architecture.", url: "articles/scalable-devsecops-scanner.html", tags: ["Architecture", "Scalability", "DevSecOps"] },
+      { title: "The Hidden Risks in Software Supply Chains", description: "Dependency confusion, typosquatting, and compromised registries threaten modern apps.", url: "articles/supply-chain-security-risks.html", tags: ["Supply Chain", "Dependency Security"] },
+      { title: "AI-Powered Threat Detection: Beyond Signatures", description: "How LLMs and behavioral analytics are reshaping threat detection and response.", url: "articles/ai-threat-detection.html", tags: ["AI Security", "Threat Detection", "Machine Learning"] }
     ];
 
     const container = document.getElementById('articles-container');
     const contentDiv = document.getElementById('article-content');
+    const searchInput = document.getElementById('search-input');
+    const tagFiltersDiv = document.getElementById('tag-filters');
+
+    let activeTag = null;
+
+    // Extract unique tags from all articles
+    const allTags = [...new Set(articles.flatMap(a => a.tags))].sort();
+
+    function renderTagFilters() {
+      tagFiltersDiv.innerHTML = '';
+      // Add "All" button
+      const allBtn = document.createElement('button');
+      allBtn.textContent = 'All';
+      allBtn.className = `tag ${activeTag === null ? 'active-tag' : ''}`;
+      allBtn.addEventListener('click', () => {
+        activeTag = null;
+        renderTagFilters();
+        renderArticles();
+      });
+      tagFiltersDiv.appendChild(allBtn);
+
+      allTags.forEach(tag => {
+        const btn = document.createElement('button');
+        btn.textContent = tag;
+        btn.className = `tag ${activeTag === tag ? 'active-tag' : ''}`;
+        btn.addEventListener('click', () => {
+          activeTag = tag;
+          renderTagFilters();
+          renderArticles();
+        });
+        tagFiltersDiv.appendChild(btn);
+      });
+    }
 
     function renderArticles() {
+      const searchTerm = searchInput.value.toLowerCase();
+      let filtered = articles.filter(article => {
+        // Search filter
+        const matchesSearch = article.title.toLowerCase().includes(searchTerm) || article.description.toLowerCase().includes(searchTerm);
+        // Tag filter
+        const matchesTag = activeTag ? article.tags.includes(activeTag) : true;
+        return matchesSearch && matchesTag;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">No articles match your filters.</div>';
+        return;
+      }
+
       container.innerHTML = '';
-      articles.forEach(article => {
+      filtered.forEach(article => {
         const card = document.createElement('div');
-        card.className = 'card p-6 cursor-pointer';
+        card.className = 'card p-6 cursor-pointer flex flex-col';
         card.innerHTML = `
           <h3 class="text-xl font-bold mb-2">${article.title}</h3>
-          <p class="text-gray-400 text-sm">${article.description}</p>
+          <p class="text-gray-400 text-sm mb-3">${article.description}</p>
+          <div class="flex flex-wrap gap-2 mt-auto">
+            ${article.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+          </div>
         `;
         card.addEventListener('click', () => loadArticle(article));
         container.appendChild(card);
@@ -89,6 +159,8 @@
       contentDiv.classList.add('hidden');
     }
 
+    searchInput.addEventListener('input', () => renderArticles());
+    renderTagFilters();
     renderArticles();
   </script>
 </body>
