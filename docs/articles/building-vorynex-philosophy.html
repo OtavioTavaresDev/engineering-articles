@@ -1,0 +1,73 @@
+<article class="prose prose-invert max-w-none">
+  <header class="mb-8">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="px-3 py-1 text-xs font-medium bg-gray-800 text-gray-300 rounded-full">Platform</span>
+      <span class="px-3 py-1 text-xs font-medium bg-gray-800 text-gray-300 rounded-full">Vorynex</span>
+    </div>
+    <h1 class="text-4xl font-bold mb-3 bg-gradient-to-r from-gray-300 to-gray-500 bg-clip-text text-transparent">Building Vorynex: Designing Security Tooling for Modern Infrastructure</h1>
+    <p class="text-gray-400">The architectural decisions, automation challenges, and security philosophy behind Vorynex.</p>
+    <div class="flex items-center gap-4 mt-4 text-sm text-gray-500">
+      <span><i class="far fa-calendar mr-1"></i> May 30, 2026</span>
+      <span><i class="far fa-clock mr-1"></i> 15 min read</span>
+    </div>
+  </header>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Why Another Security Tooling Platform?</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      The security industry loves heavy platforms. SOAR, SIEM, XDR — each requires dedicated teams, infinite budgets, and months of tuning. But what about freelancers, small teams, or engineers who just need a <strong>working script</strong> that parses logs without a 50GB agent?
+    </p>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Vorynex was born from frustration: reinventing the same log parsers, enumeration scripts, and notification bots across engagements. The philosophy is simple: <strong>lightweight, composable, offline-first tooling</strong> that solves real problems without vendor lock-in.
+    </p>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Design Principles</h2>
+    <ul class="space-y-3 text-gray-300">
+      <li class="flex items-start gap-2"><span class="text-gray-400">▪️</span> <strong>CLI-first</strong> – Automatable, scriptable, composable with Unix pipes.</li>
+      <li class="flex items-start gap-2"><span class="text-gray-400">▪️</span> <strong>No telemetry by default</strong> – Your data stays yours.</li>
+      <li class="flex items-start gap-2"><span class="text-gray-400">▪️</span> <strong>Containerized where it adds value</strong> – Complex dependencies (e.g., Recon Toolkit) use Docker; simple scripts are pure Python/Bash.</li>
+      <li class="flex items-start gap-2"><span class="text-gray-400">▪️</span> <strong>Single-file distribution</strong> – Download and run. No installation rituals.</li>
+      <li class="flex items-start gap-2"><span class="text-gray-400">▪️</span> <strong>Battle-tested</strong> – Every tool was used in real pentests, IR engagements, or daily ops before release.</li>
+    </ul>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Case Study: Log Analyzer Pro</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      One of Vorynex's most popular tools is a CLI log analyzer. It ingests syslog, auth.log, web server logs, and Windows Event Logs, then highlights anomalies using statistical baselines. The implementation:
+    </p>
+    <pre class="bg-gray-800 p-4 rounded-lg overflow-x-auto text-sm text-gray-300"><code># Core logic (simplified)
+import pandas as pd
+from scipy import stats
+
+df = pd.read_csv(log_file, parse_dates=['timestamp'])
+df['hour'] = df['timestamp'].dt.hour
+hourly_counts = df.groupby('hour').size()
+z_scores = stats.zscore(hourly_counts)
+anomalous_hours = hourly_counts[abs(z_scores) > 3]
+</code></pre>
+    <p class="text-gray-300 mt-4 leading-relaxed">
+      The entire tool is under 500 lines, runs on any Python 3.8+ system, and produces a report in seconds. No database, no web UI, no fuss.
+    </p>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">SaaS Components: Lightweight by Design</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Vorynex offers SaaS products like Asset Inventory and Threat Feed Aggregator. These run on a single VPS with SQLite (or PostgreSQL for multi-tenant). The frontend uses minimal JavaScript — mostly HTML-over-the-wire with HTMX. This keeps operational costs low and maintenance simple.
+    </p>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">The Open Core Future</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Many Vorynex tools are open-source or have free tiers. The paid versions add support, pre-built binaries, and enterprise integrations. This model ensures the tooling improves through real-world feedback, not marketing roadmaps.
+    </p>
+  </section>
+
+  <footer class="mt-12 pt-6 border-t border-gray-700 text-sm text-gray-500">
+    <p>Tags: <span class="text-gray-400">Vorynex</span>, <span class="text-gray-400">Security Tooling</span>, <span class="text-gray-400">Platform Engineering</span>, <span class="text-gray-400">Automation</span></p>
+  </footer>
+</article>

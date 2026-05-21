@@ -1,0 +1,84 @@
+<article class="prose prose-invert max-w-none">
+  <header class="mb-8">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="px-3 py-1 text-xs font-medium bg-red-900/60 text-red-300 rounded-full">Runtime Security</span>
+      <span class="px-3 py-1 text-xs font-medium bg-blue-900/60 text-blue-300 rounded-full">Cloud Native</span>
+    </div>
+    <h1 class="text-4xl font-bold mb-3 bg-gradient-to-r from-red-400 to-blue-400 bg-clip-text text-transparent">Runtime Security in Modern Cloud Infrastructure</h1>
+    <p class="text-gray-400">Why image scanning and network perimeter controls fail to stop attacks that execute inside your workloads.</p>
+    <div class="flex items-center gap-4 mt-4 text-sm text-gray-500">
+      <span><i class="far fa-calendar mr-1"></i> May 28, 2026</span>
+      <span><i class="far fa-clock mr-1"></i> 14 min read</span>
+    </div>
+  </header>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">The Blind Spot of Pre-Deployment Security</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Most teams invest heavily in image scanning, SAST, and vulnerability management. These are necessary but insufficient. A container that passed all pre-deployment checks can still be compromised at runtime via a zero-day, exposed secret, or misconfiguration. Once the attacker executes code inside the container, you need <strong>runtime detection</strong> to stop them.
+    </p>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Runtime security monitors system calls, process execution, file access, and network connections from inside the kernel. It doesn't rely on signatures — it looks for anomalous behavior that indicates an active breach.
+    </p>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Key Runtime Threats</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+        <h4 class="text-sm font-semibold text-red-400 mb-2">💀 Cryptominer Deployment</h4>
+        <p class="text-gray-400 text-sm">Attacker downloads XMRig via curl, bypassing image scanners because the payload never existed pre-runtime.</p>
+      </div>
+      <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+        <h4 class="text-sm font-semibold text-red-400 mb-2">🐚 Reverse Shell</h4>
+        <p class="text-gray-400 text-sm">Compromised web app spawns bash and connects to external C2. Traditional firewalls see outbound HTTPS, not suspicious.</p>
+      </div>
+      <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+        <h4 class="text-sm font-semibold text-red-400 mb-2">🗄️ Container Escape</h4>
+        <p class="text-gray-400 text-sm">Privileged container mounts host filesystem or exploits kernel bug to break isolation.</p>
+      </div>
+      <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+        <h4 class="text-sm font-semibold text-red-400 mb-2">🔑 Credential Theft</h4>
+        <p class="text-gray-400 text-sm">Attacker reads AWS metadata endpoint or mounted kubeconfig, then pivots to cloud resources.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Detection Mechanisms: eBPF and Falco</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      eBPF (extended Berkeley Packet Filter) allows running sandboxed programs in the Linux kernel without changing kernel code. It's the foundation for modern runtime security tools:
+    </p>
+    <ul class="space-y-2 text-gray-300 mb-4">
+      <li class="flex items-start gap-2"><span class="text-blue-400">•</span> <strong>Falco</strong>: CNCF project that detects anomalous syscalls, file writes, and network activity.</li>
+      <li class="flex items-start gap-2"><span class="text-blue-400">•</span> <strong>Tetragon</strong>: eBPF-based observability from Cilium.</li>
+      <li class="flex items-start gap-2"><span class="text-blue-400">•</span> <strong>Tracee</strong>: Aqua's open-source runtime security.</li>
+    </ul>
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+      <pre class="text-sm text-gray-300"><code># Falco rule to detect package manager execution in container
+- rule: Launch Package Manager in Container
+  desc: Package manager run inside a container (often indicates compromise)
+  condition: container.id exists and proc.name in (apt, yum, apk, pip, npm)
+  output: Package manager executed inside container (cmd=%proc.cmdline)
+  priority: WARNING</code></pre>
+    </div>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Operationalizing Runtime Detection</h2>
+    <ol class="space-y-3 text-gray-300 list-decimal list-inside">
+      <li>Deploy Falco as a DaemonSet in Kubernetes clusters.</li>
+      <li>Forward events to SIEM or a dedicated alert channel (Slack, Opsgenie).</li>
+      <li>Create a baseline: identify which syscalls are normal for your workloads.</li>
+      <li>Tune rules to suppress known-good behavior (e.g., your CI agent uses curl).</li>
+      <li>Build automated responses: isolate node, kill pod, or trigger incident workflow.</li>
+    </ol>
+    <p class="text-gray-300 mt-4 leading-relaxed">
+      Runtime security is not set-and-forget. It requires continuous tuning, but without it, you're flying blind after deployment.
+    </p>
+  </section>
+
+  <footer class="mt-12 pt-6 border-t border-gray-700 text-sm text-gray-500">
+    <p>Tags: <span class="text-red-400">Runtime Security</span>, <span class="text-red-400">Falco</span>, <span class="text-red-400">eBPF</span>, <span class="text-red-400">Kubernetes</span></p>
+  </footer>
+</article>

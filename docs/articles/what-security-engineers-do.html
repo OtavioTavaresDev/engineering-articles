@@ -2,85 +2,99 @@
   <header class="mb-8">
     <div class="flex items-center gap-3 mb-4">
       <span class="px-3 py-1 text-xs font-medium bg-blue-900/60 text-blue-300 rounded-full">Career</span>
-      <span class="px-3 py-1 text-xs font-medium bg-green-900/60 text-green-300 rounded-full">Industry</span>
+      <span class="px-3 py-1 text-xs font-medium bg-green-900/60 text-green-300 rounded-full">Security Engineering</span>
     </div>
     <h1 class="text-4xl font-bold mb-3 bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">What Security Engineers Actually Do in Modern Companies</h1>
     <p class="text-gray-400">Beyond stereotypes: the real operational responsibilities of modern security engineers.</p>
     <div class="flex items-center gap-4 mt-4 text-sm text-gray-500">
-      <span><i class="far fa-calendar mr-1"></i> May 12, 2026</span>
-      <span><i class="far fa-clock mr-1"></i> 10 min read</span>
+      <span><i class="far fa-calendar mr-1"></i> May 26, 2026</span>
+      <span><i class="far fa-clock mr-1"></i> 12 min read</span>
     </div>
   </header>
 
   <section class="mb-8">
-    <h2 class="text-2xl font-semibold mb-3">The Hollywood Distortion</h2>
+    <h2 class="text-2xl font-semibold mb-3">The Day-to-Day Reality</h2>
     <p class="text-gray-300 mb-4 leading-relaxed">
-      Pop culture portrays security engineers as hoodie-wearing hackers who break into systems in seconds. Real security work is far more boring — and far more valuable. Most security engineers spend their days reviewing architecture diagrams, writing detection rules, automating response workflows, and fighting alert fatigue.
+      Pop culture sells a fantasy: hoodies, green screens, and hacking the mainframe in 30 seconds. Real security engineering is less cinematic and more about <strong>building systems that reduce risk</strong>. Most days involve architecture reviews, log analysis, automation scripts, and cross-team collaboration.
     </p>
     <p class="text-gray-300 mb-4 leading-relaxed">
-      The role varies dramatically by company size, industry, and maturity. But across the board, security engineering is about <strong>building systems that reduce risk</strong> — not just finding vulnerabilities.
+      A typical security engineer splits time across four main areas: detection engineering, cloud security posture management, DevSecOps automation, and incident response. The ratio shifts based on seniority and company stage — startups need generalists, enterprises need specialists.
     </p>
   </section>
 
   <section class="mb-8">
-    <h2 class="text-2xl font-semibold mb-3">The Main Disciplines</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <h2 class="text-2xl font-semibold mb-3">Core Responsibilities</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
       <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-blue-400 mb-2">🛡️ AppSec (Application Security)</h4>
-        <ul class="text-gray-400 text-sm space-y-1">
-          <li>• Code reviews and threat modeling</li>
-          <li>• SAST/DAST tooling integration</li>
-          <li>• Developer training and security champions</li>
-          <li>• Bug bounty program management</li>
-        </ul>
-      </div>
-      <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-blue-400 mb-2">☁️ Cloud Security</h4>
-        <ul class="text-gray-400 text-sm space-y-1">
-          <li>• Infrastructure-as-code scanning</li>
-          <li>• IAM policy review and least privilege</li>
-          <li>• CSPM and container security</li>
-          <li>• Compliance automation (SOC2, ISO27001)</li>
-        </ul>
-      </div>
-      <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-blue-400 mb-2">🔍 Detection Engineering</h4>
+        <h4 class="text-sm font-semibold text-blue-400 mb-2">Detection & Response</h4>
         <ul class="text-gray-400 text-sm space-y-1">
           <li>• Writing Sigma/KQL detection rules</li>
-          <li>• Tuning SIEM alerts to reduce noise</li>
+          <li>• Tuning SIEM alerts to reduce false positives</li>
           <li>• Building threat hunting playbooks</li>
-          <li>• Measuring detection coverage</li>
+          <li>• Participating in on-call rotation</li>
         </ul>
       </div>
       <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
-        <h4 class="text-sm font-semibold text-blue-400 mb-2">⚙️ DevSecOps</h4>
+        <h4 class="text-sm font-semibold text-blue-400 mb-2">Cloud Security</h4>
         <ul class="text-gray-400 text-sm space-y-1">
-          <li>• Securing CI/CD pipelines</li>
-          <li>• Secrets management and rotation</li>
-          <li>• SBOM generation and supply chain security</li>
-          <li>• Automating security gates</li>
+          <li>• IaC scanning (Terraform, CloudFormation)</li>
+          <li>• IAM least privilege reviews</li>
+          <li>• CSPM tooling (e.g., Wiz, Orca, Prowler)</li>
+          <li>• Kubernetes admission control policies</li>
+        </ul>
+      </div>
+      <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+        <h4 class="text-sm font-semibold text-blue-400 mb-2">DevSecOps</h4>
+        <ul class="text-gray-400 text-sm space-y-1">
+          <li>• Securing CI/CD pipelines (GitHub Actions, GitLab CI)</li>
+          <li>• Secrets management (HashiCorp Vault, AWS Secrets Manager)</li>
+          <li>• SAST/DAST integration</li>
+          <li>• SBOM generation and supply chain verification</li>
+        </ul>
+      </div>
+      <div class="bg-gray-800 border border-gray-700 rounded-lg p-4">
+        <h4 class="text-sm font-semibold text-blue-400 mb-2">Platform Engineering</h4>
+        <ul class="text-gray-400 text-sm space-y-1">
+          <li>• Building internal security tooling</li>
+          <li>• Automating vulnerability remediation</li>
+          <li>• Deploying and maintaining Falco, osquery, Wazuh</li>
+          <li>• Managing infrastructure as code</li>
         </ul>
       </div>
     </div>
   </section>
 
   <section class="mb-8">
-    <h2 class="text-2xl font-semibold mb-3">The Operational Reality: Meetings, Documentation, and Politics</h2>
+    <h2 class="text-2xl font-semibold mb-3">The Unsexy But Critical Work</h2>
     <p class="text-gray-300 mb-4 leading-relaxed">
-      A typical week for a security engineer isn't all hacking. Expect:
+      Documentation, compliance evidence collection, and risk assessment meetings take up surprising amounts of time. A security engineer might spend a full week writing a runbook for a new detection pipeline, or reviewing a vendor's SOC2 report. This work is invisible but essential — without it, security programs crumble during audits or incidents.
     </p>
-    <ul class="space-y-2 text-gray-300 mb-4">
-      <li class="flex items-start gap-2"><span class="text-yellow-400">•</span> 50% of time: engineering (writing code, rules, automation).</li>
-      <li class="flex items-start gap-2"><span class="text-yellow-400">•</span> 30%: meetings (design reviews, risk assessments, syncs).</li>
-      <li class="flex items-start gap-2"><span class="text-yellow-400">•</span> 15%: documentation (runbooks, post-mortems, policies).</li>
-      <li class="flex items-start gap-2"><span class="text-yellow-400">•</span> 5%: actual incident response (when things break).</li>
+    <div class="bg-gray-800 border border-gray-700 rounded-lg p-4 mb-4">
+      <h4 class="text-sm font-semibold text-yellow-400 mb-2">📊 Time Spent (Typical Week)</h4>
+      <ul class="text-gray-400 text-sm space-y-1">
+        <li>• 40% Engineering (code, rules, automation)</li>
+        <li>• 30% Meetings (design reviews, risk assessments, syncs)</li>
+        <li>• 15% Documentation (runbooks, policies, post-mortems)</li>
+        <li>• 10% Research & learning (new threats, tools)</li>
+        <li>• 5% Incident response (when things break)</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Skills That Matter Most</h2>
+    <ul class="space-y-2 text-gray-300">
+      <li class="flex items-start gap-2"><span class="text-green-400">●</span> <strong>Systems thinking:</strong> Understanding how components interact in production.</li>
+      <li class="flex items-start gap-2"><span class="text-green-400">●</span> <strong>Communication:</strong> Explaining risk to executives and engineers.</li>
+      <li class="flex items-start gap-2"><span class="text-green-400">●</span> <strong>Automation mindset:</strong> Scripting repetitive tasks.</li>
+      <li class="flex items-start gap-2"><span class="text-green-400">●</span> <strong>Debugging under pressure:</strong> Incident response without panic.</li>
     </ul>
-    <p class="text-gray-300 mb-4 leading-relaxed">
-      The stereotype of constant firefighting is wrong. Good security engineering prevents fires — which means most days feel calm, but that calm is earned by solid systems.
+    <p class="text-gray-300 mt-4 leading-relaxed">
+      Certifications matter less than experience. A GitHub portfolio of detection rules, Terraform modules, or automation scripts often impresses more than a CISSP.
     </p>
   </section>
 
   <footer class="mt-12 pt-6 border-t border-gray-700 text-sm text-gray-500">
-    <p>Tags: <span class="text-blue-400">Career</span>, <span class="text-blue-400">Security Engineering</span>, <span class="text-blue-400">Industry</span></p>
+    <p>Tags: <span class="text-blue-400">Security Engineering</span>, <span class="text-blue-400">Career</span>, <span class="text-blue-400">Platform Security</span></p>
   </footer>
 </article>
