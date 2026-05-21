@@ -1,0 +1,89 @@
+<article class="prose prose-invert max-w-none">
+  <header class="mb-8">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="px-3 py-1 text-xs font-medium bg-green-900/60 text-green-300 rounded-full">Detection Engineering</span>
+      <span class="px-3 py-1 text-xs font-medium bg-blue-900/60 text-blue-300 rounded-full">SIEM</span>
+    </div>
+    <h1 class="text-4xl font-bold mb-3 bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">Building Effective Detection Rules with Sigma and KQL</h1>
+    <p class="text-gray-400">Detection engineering strategies for reducing noise and improving signal quality.</p>
+    <div class="flex items-center gap-4 mt-4 text-sm text-gray-500">
+      <span><i class="far fa-calendar mr-1"></i> May 8, 2026</span>
+      <span><i class="far fa-clock mr-1"></i> 13 min read</span>
+    </div>
+  </header>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Why Sigma Changes Detection Engineering</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Sigma is a generic, open-source signature format for SIEM systems. Instead of writing separate rules for Splunk, Elastic, and Sentinel, you write one Sigma rule and convert it to each platform. This allows detection engineers to <strong>share, version, and test rules</strong> like software.
+    </p>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      More importantly, Sigma forces you to think in terms of log fields, not vendor syntax. A rule for "PowerShell downloading a file" becomes portable.
+    </p>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Example Sigma Rule: Suspicious PowerShell Command</h2>
+    <pre class="bg-gray-800 p-4 rounded-lg overflow-x-auto text-sm text-gray-300"><code>title: Suspicious PowerShell Download String
+status: experimental
+description: Detects PowerShell commands that download a file from the internet
+logsource:
+    product: windows
+    service: powershell
+detection:
+    selection:
+        ScriptBlockText|contains:
+            - 'Invoke-WebRequest'
+            - 'Net.WebClient'
+            - 'Start-BitsTransfer'
+    condition: selection
+tags:
+    - attack.command_and_control
+    - attack.t1105
+level: medium</code></pre>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">KQL for Real-Time Hunting</h2>
+    <p class="text-gray-300 mb-4 leading-relaxed">
+      Kusto Query Language (KQL) is used in Microsoft Sentinel, Azure Data Explorer, and Defender. It's optimized for time-series and large-volume log analysis. A typical hunting query for lateral movement:
+    </p>
+    <pre class="bg-gray-800 p-4 rounded-lg overflow-x-auto text-sm text-gray-300"><code>// Find Remote Desktop logins from unusual IPs
+IdentityLogonEvents
+| where Timestamp > ago(7d)
+| where Protocol == "RDP"
+| summarize SuccessfulLogons = count() by AccountUpn, IPAddress
+| where SuccessfulLogons < 5  // Low volume, might be suspicious
+| join kind=inner (
+    IdentityLogonEvents
+    | where Timestamp > ago(30d)
+    | summarize Baseline = count() by AccountUpn
+) on AccountUpn
+| where SuccessfulLogons < Baseline * 0.1  // Significant deviation</code></pre>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">From Rule to Signal: The Testing Loop</h2>
+    <ol class="space-y-3 text-gray-300 list-decimal list-inside">
+      <li><strong>Write the rule</strong> in Sigma or directly in your SIEM's language.</li>
+      <li><strong>Test against historical data</strong> (last 30 days) to measure baseline volume.</li>
+      <li><strong>Run in "log only" mode</strong> for a week — don't alert yet, just record.</li>
+      <li><strong>Tune false positives</strong> by adding exclusions (e.g., "known good process path").</li>
+      <li><strong>Enable alerts</strong> with a low severity, then increase as confidence grows.</li>
+    </ol>
+  </section>
+
+  <section class="mb-8">
+    <h2 class="text-2xl font-semibold mb-3">Common Tuning Techniques</h2>
+    <ul class="space-y-3 text-gray-300">
+      <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span> <strong>Whitelist by process path:</strong> Ignore `C:\Program Files\LegitApp\*` if it's noisy but benign.</li>
+      <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span> <strong>Count thresholds:</strong> Alert only if same event occurs more than 5 times in 1 minute.</li>
+      <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span> <strong>Time-based suppression:</strong> Don't alert on administrative activity during business hours.</li>
+      <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span> <strong>Correlation with asset criticality:</strong> Alert only if the target is a domain controller or a finance server.</li>
+    </ul>
+  </section>
+
+  <footer class="mt-12 pt-6 border-t border-gray-700 text-sm text-gray-500">
+    <p>Tags: <span class="text-green-400">Detection Engineering</span>, <span class="text-green-400">Sigma</span>, <span class="text-green-400">KQL</span>, <span class="text-green-400">SIEM</span></p>
+  </footer>
+</article>
